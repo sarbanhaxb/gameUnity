@@ -4,6 +4,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using Unity.VisualScripting;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -22,7 +23,13 @@ public class CharacterMovement : MonoBehaviour
     float moveYidle;
 
     Animator animator;
-    EventSystem IPointerDownHandler = null;
+
+    Vector3 mouseDirection;
+
+    float cooldown = 3f;
+    float lastAttackedAt = -9999f;
+    public GameObject bulletPref;
+
 
     void Start()
     {
@@ -86,6 +93,16 @@ public class CharacterMovement : MonoBehaviour
         animator.SetBool("IsAttack", true);
         animator.SetFloat("MoveX", moveXidle);
         animator.SetFloat("MoveY", moveYidle);
+
+        mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseDirection.z = 0;
+        mouseDirection = mouseDirection - transform.position;
+
+        GameObject bulletInstance = Instantiate(bulletPref, transform.position, Quaternion.identity);
+        bulletInstance.GetComponent<Rigidbody>().velocity = mouseDirection * 5f;
+
+        Destroy(bulletInstance, 4);
+        lastAttackedAt = Time.time;
     }
 
 }
