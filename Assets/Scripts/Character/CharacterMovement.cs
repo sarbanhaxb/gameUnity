@@ -26,10 +26,6 @@ public class CharacterMovement : MonoBehaviour
 
     void Start()
     {
-        if (IPointerDownHandler != null)
-        {
-            Debug.Log("ASDSADSAD");
-        }
 
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
