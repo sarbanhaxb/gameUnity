@@ -73,5 +73,19 @@ public class CharacterMovement : MonoBehaviour
 
         animator.SetFloat("MoveX", moveX);
         animator.SetFloat("MoveY", moveY);
+
+
+        if (Input.GetMouseButtonDown(0))
+            Attack();
+        else
+            animator.SetBool("IsAttack", false);
     }
+
+    void Attack()
+    {
+        animator.SetBool("IsAttack", true);
+        animator.SetFloat("MoveX", moveXidle);
+        animator.SetFloat("MoveY", moveYidle);
+    }
+
 }
