@@ -11,6 +11,7 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField]
+    // скорость движения персонажа
     float moveSpeed = 5f;
 
     CharacterController controller;
@@ -30,14 +31,40 @@ public class CharacterMovement : MonoBehaviour
     float lastAttackedAt = -9999f;
     public GameObject bulletPref;
 
+    int gunType = 0;
+
 
     void Start()
     {
-
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-
     }
+
+
+
+    //получает направление движенипя персонажа
+    void HandleMovementInput()
+    {
+        moveX = Input.GetAxisRaw("Horizontal");
+        moveY = Input.GetAxisRaw("Vertical");
+        moveDirection = new Vector2(moveX, moveY).normalized;
+    }
+
+    void HandleAnimation()
+    {
+        if (moveDirection != Vector2.zero)
+        {
+            Animate(moveX, moveY, 1);
+            moveXidle = moveX;
+            moveYidle = moveY;
+        }
+        else
+        {
+            Animate(moveXidle, moveYidle, 0);
+        } 
+    }
+
+
 
     // Update is called once per frame
     void Update()
@@ -57,6 +84,16 @@ public class CharacterMovement : MonoBehaviour
         {
             Animate(moveXidle, moveYidle, 0);
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+        }
+        else if (!Input.GetMouseButtonUp(0)) 
+        {
+            animator.SetBool("IsAttack", false);
+        }
+
     }
 
     private void FixedUpdate()
@@ -80,29 +117,38 @@ public class CharacterMovement : MonoBehaviour
 
         animator.SetFloat("MoveX", moveX);
         animator.SetFloat("MoveY", moveY);
-
-
-        if (Input.GetMouseButtonDown(0))
-            Attack();
-        else
-            animator.SetBool("IsAttack", false);
     }
 
-    void Attack()
+    void Shoot()
     {
+        animator.SetFloat("ShootX", GetShootingDirection().x);
+        animator.SetFloat("ShootY", GetShootingDirection().y);
+
         animator.SetBool("IsAttack", true);
-        animator.SetFloat("MoveX", moveXidle);
-        animator.SetFloat("MoveY", moveYidle);
 
+    }
+
+
+    //запускает анимацию стрельбы
+    public void Bullet()
+    {
+        Vector3 shootingDirection = GetShootingDirection();
+        float angle = Mathf.Atan2(shootingDirection.y, shootingDirection.x) * Mathf.Rad2Deg;
+        GameObject bulletInstance = Instantiate(bulletPref, transform.position + shootingDirection, Quaternion.identity);
+
+        bulletInstance.GetComponent<Rigidbody2D>().velocity = shootingDirection * 5f;
+
+        bulletInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        Destroy(bulletInstance, 4f);
+    }
+
+    //возвращает позицию клика курсора
+    Vector3 GetShootingDirection()
+    {
         mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseDirection.z = 0;
-        mouseDirection = mouseDirection - transform.position;
-
-        GameObject bulletInstance = Instantiate(bulletPref, transform.position, Quaternion.identity);
-        bulletInstance.GetComponent<Rigidbody>().velocity = mouseDirection * 5f;
-
-        Destroy(bulletInstance, 4);
-        lastAttackedAt = Time.time;
+        mouseDirection.z = 0f;
+        return (mouseDirection - transform.position).normalized;
     }
 
 }
