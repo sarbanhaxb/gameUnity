@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 
 public class CharacterMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // НУЖНО РАЗОБРАТЬСЯ С ВЫЛЕТОМ ДВУХ ПУЛЬ ИЗ-ЗА ВКЛЮЧЕНИЯ ОДНОВРЕМЕННО ДВУХ АНИМАЦИЙ
 
     [SerializeField]
     // скорость движения персонажа
@@ -27,12 +27,12 @@ public class CharacterMovement : MonoBehaviour
 
     Vector3 mouseDirection;
 
-    float cooldown = 3f;
-    float lastAttackedAt = -9999f;
     public GameObject bulletPref;
+    GunType gunType = GunType.Pistol;
 
-    int gunType = 0;
-
+    [Header("Melee Attack")]
+    [SerializeField] Transform meleeAttackPoint;
+    [SerializeField] float meleeAttackRange = 1f;
 
     void Start()
     {
@@ -43,12 +43,6 @@ public class CharacterMovement : MonoBehaviour
 
 
     //получает направление движенипя персонажа
-    void HandleMovementInput()
-    {
-        moveX = Input.GetAxisRaw("Horizontal");
-        moveY = Input.GetAxisRaw("Vertical");
-        moveDirection = new Vector2(moveX, moveY).normalized;
-    }
 
     void HandleAnimation()
     {
@@ -69,32 +63,19 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        moveX = Input.GetAxis("Horizontal");
-        moveY = Input.GetAxis("Vertical");
-
-        moveDirection = new Vector2(moveX, moveY).normalized;
-
-        if (moveX != 0 || moveY != 0)
-        {
-            Animate(moveX, moveY, 1);
-            moveXidle = moveX;
-            moveYidle = moveY;
-        }
-        else
-        {
-            Animate(moveXidle, moveYidle, 0);
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-        }
-        else if (!Input.GetMouseButtonUp(0)) 
-        {
-            animator.SetBool("IsAttack", false);
-        }
-
+        HandleAttack();
+        HandleMovementInput();
+        HandleAnimation();
+        HandleChangeGun();
     }
+
+    void HandleMovementInput()
+    {
+        moveX = Input.GetAxisRaw("Horizontal");
+        moveY = Input.GetAxisRaw("Vertical");
+        moveDirection = new Vector2(moveX, moveY).normalized;
+    }
+
 
     private void FixedUpdate()
     {
@@ -119,15 +100,48 @@ public class CharacterMovement : MonoBehaviour
         animator.SetFloat("MoveY", moveY);
     }
 
-    void Shoot()
+
+    void HandleAttack()
+    {
+        if (Input.GetMouseButtonDown(0) && moveDirection == Vector2.zero && gunType==GunType.Pistol)
+        {
+            animator.SetFloat("ShootX", GetShootingDirection().x);
+            animator.SetFloat("ShootY", GetShootingDirection().y);
+            animator.SetBool("IsAttackIdle", true);
+        }
+        else if (Input.GetMouseButtonDown(0) && moveDirection != Vector2.zero && gunType == GunType.Pistol)
+        {
+            animator.SetFloat("ShootX", GetShootingDirection().x);
+            animator.SetFloat("ShootY", GetShootingDirection().y);
+            animator.SetBool("IsAttackMove", true);
+        }
+
+        else if (Input.GetMouseButtonDown(0) && gunType == GunType.Knife)
+        {
+            animator.SetFloat("ShootX", GetShootingDirection().x);
+            animator.SetFloat("ShootY", GetShootingDirection().y);
+            animator.SetTrigger("Melee");
+        }
+
+        else if (!Input.GetMouseButtonUp(0))
+        {
+            animator.SetBool("IsAttackMove", false);
+            animator.SetBool("IsAttackIdle", false);
+        }
+    }
+
+    void ShootIdle()
     {
         animator.SetFloat("ShootX", GetShootingDirection().x);
         animator.SetFloat("ShootY", GetShootingDirection().y);
-
-        animator.SetBool("IsAttack", true);
-
+        animator.SetBool("IsAttackIdle", true);
     }
-
+    void ShootMove()
+    {
+        animator.SetFloat("ShootX", GetShootingDirection().x);
+        animator.SetFloat("ShootY", GetShootingDirection().y);
+        animator.SetBool("IsAttackMove", true);
+    }
 
     //запускает анимацию стрельбы
     public void Bullet()
@@ -149,6 +163,41 @@ public class CharacterMovement : MonoBehaviour
         mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseDirection.z = 0f;
         return (mouseDirection - transform.position).normalized;
+    }
+
+    //изменить оружие
+    void HandleChangeGun()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            gunType = GunType.Pistol;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            gunType = GunType.Knife;
+        }
+
+        Debug.Log(gunType);
+    }
+
+    void MeleeAttack()
+    {
+        animator.SetTrigger("Melee");
+        Collider2D enemy = Physics2D.OverlapCircle(meleeAttackPoint.position, meleeAttackRange);
+        if (enemy != null)
+        {
+            Debug.Log(enemy.name);
+        }
+        else
+        {
+            Debug.Log("BOBR KURVA");
+        }
+    }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawSphere(meleeAttackPoint.position, meleeAttackRange);
     }
 
 }
