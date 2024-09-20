@@ -60,7 +60,7 @@ public class CharacterMovement : MonoBehaviour
 
 
 
-    // Update is called once per frame
+    // вызывает все рабочие методы
     void Update()
     {
         HandleAttack();
@@ -69,6 +69,7 @@ public class CharacterMovement : MonoBehaviour
         HandleChangeGun();
     }
 
+    //определяет направление движения
     void HandleMovementInput()
     {
         moveX = Input.GetAxisRaw("Horizontal");
@@ -76,12 +77,14 @@ public class CharacterMovement : MonoBehaviour
         moveDirection = new Vector2(moveX, moveY).normalized;
     }
 
-
+    //хз
     private void FixedUpdate()
     {
         controller.Move(moveDirection * moveSpeed * Time.deltaTime);
     }
 
+
+    //переключает с ходьбы на стояние и наоборот
     void Animate(float moveX, float moveY, int layer)
     {
         switch (layer)
@@ -101,6 +104,7 @@ public class CharacterMovement : MonoBehaviour
     }
 
 
+    //переключение анимаций стрельбы
     void HandleAttack()
     {
         if (Input.GetMouseButtonDown(0) && moveDirection == Vector2.zero && gunType==GunType.Pistol)
@@ -130,18 +134,19 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-    void ShootIdle()
-    {
-        animator.SetFloat("ShootX", GetShootingDirection().x);
-        animator.SetFloat("ShootY", GetShootingDirection().y);
-        animator.SetBool("IsAttackIdle", true);
-    }
-    void ShootMove()
-    {
-        animator.SetFloat("ShootX", GetShootingDirection().x);
-        animator.SetFloat("ShootY", GetShootingDirection().y);
-        animator.SetBool("IsAttackMove", true);
-    }
+    //включение анимации стрельбы стоя
+    //void ShootIdle()
+    //{
+    //    animator.SetFloat("ShootX", GetShootingDirection().x);
+    //    animator.SetFloat("ShootY", GetShootingDirection().y);
+    //    animator.SetBool("IsAttackIdle", true);
+    //}
+    //void ShootMove()
+    //{
+    //    animator.SetFloat("ShootX", GetShootingDirection().x);
+    //    animator.SetFloat("ShootY", GetShootingDirection().y);
+    //    animator.SetBool("IsAttackMove", true);
+    //}
 
     //запускает анимацию стрельбы
     public void Bullet()
@@ -180,6 +185,8 @@ public class CharacterMovement : MonoBehaviour
         Debug.Log(gunType);
     }
 
+
+    //включает ближний бой
     void MeleeAttack()
     {
         animator.SetTrigger("Melee");
@@ -195,6 +202,7 @@ public class CharacterMovement : MonoBehaviour
     }
 
 
+    //отрисовывает радиус удара
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawSphere(meleeAttackPoint.position, meleeAttackRange);
