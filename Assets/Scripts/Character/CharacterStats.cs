@@ -14,6 +14,7 @@ public class CharacterStats : MonoBehaviour
     public int Level { set; get; } = 1;
     public int Armor { set; get; }
     public int MaxArmorHP {get; set; }
+    public int Money { set; get; } = 0;
 
     CharacterStats()
     {
