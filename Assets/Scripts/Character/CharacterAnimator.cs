@@ -9,6 +9,7 @@ public class CharacterAnimator : MonoBehaviour
     CharacterMovement move;
     CharacterAttack attack;
 
+
     float moveXidle;
     float moveYidle;
 
@@ -59,13 +60,13 @@ public class CharacterAnimator : MonoBehaviour
 
     void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Pistol)
+        if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Pistol && attack.HandleChangeGun().Ammo > 0)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
             animator.SetFloat("ShootY", move.GetShootingDirection().y);
             animator.SetBool("IsAttackIdle", true);
         }
-        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Pistol)
+        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Pistol && attack.HandleChangeGun().Ammo > 0)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
             animator.SetFloat("ShootY", move.GetShootingDirection().y);

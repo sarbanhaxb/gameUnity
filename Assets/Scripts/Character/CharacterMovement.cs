@@ -23,7 +23,6 @@ public class CharacterMovement : MonoBehaviour
     Vector3 mouseDirection;
 
     public GameObject bulletPref;
-    //public GunType gunType = GunType.Pistol;
 
 
     void Start()
@@ -35,7 +34,6 @@ public class CharacterMovement : MonoBehaviour
     void Update()
     {
         HandleMovementInput();
-        //HandleChangeGun();
     }
 
     //для опитмизации

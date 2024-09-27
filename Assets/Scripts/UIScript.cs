@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 public class UIScript : MonoBehaviour
 {
-
     CharacterStats stats;
+    CharacterAttack characterAttack;
 
     [Header ("Bar")]
     [SerializeField] Slider hpBar;
@@ -22,6 +23,7 @@ public class UIScript : MonoBehaviour
     void Start()
     {
         stats = GameObject.FindAnyObjectByType<CharacterStats>();
+        characterAttack = FindObjectOfType<CharacterAttack>();
     }
 
     // Update is called once per frame
@@ -36,7 +38,7 @@ public class UIScript : MonoBehaviour
         armorBar.value = stats.Armor;
         expBar.value = stats.Experience;
         lvlText.text = stats.Level.ToString();
-        ammoText.text = stats.Ammo+"/"+stats.MaxAmmo;
+        ammoText.text = characterAttack.HandleChangeGun().Ammo+"/"+ characterAttack.HandleChangeGun().MaxAmmo;
         moneyText.text = stats.Money+"$";
     }
 }

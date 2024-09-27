@@ -7,6 +7,10 @@ public class CharacterAttack : MonoBehaviour
     public GunType gunType = GunType.Pistol;
 
     CharacterMovement move;
+    CharacterStats stats;
+    WeaponScript Stats;
+    public List<WeaponScript> weapons;
+
 
     [Header("Melee Attack")]
     [SerializeField] Transform meleeAttackPoint;
@@ -16,6 +20,7 @@ public class CharacterAttack : MonoBehaviour
     void Start()
     {
         move = GetComponent<CharacterMovement>();
+        stats = GetComponent<CharacterStats>();
     }
 
     // Update is called once per frame
@@ -25,8 +30,9 @@ public class CharacterAttack : MonoBehaviour
     }
 
     //изменить оружие
-    void HandleChangeGun()
+    public WeaponScript HandleChangeGun()
     {
+        WeaponScript weapon1 = null;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             gunType = GunType.Pistol;
@@ -36,13 +42,20 @@ public class CharacterAttack : MonoBehaviour
             gunType = GunType.Knife;
         }
 
-        Debug.Log(gunType);
+        foreach (var weapon in weapons)
+        {
+            if (weapon.GunType == gunType)
+            {
+                weapon1 = weapon;
+            }
+        }
+
+        return weapon1;
     }
 
     //включает ближний бой
     public void MeleeAttack()
     {
-        //animator.SetTrigger("Melee");
         Collider2D enemy = Physics2D.OverlapCircle(meleeAttackPoint.position, meleeAttackRange);
         if (enemy != null)
         {
@@ -62,6 +75,12 @@ public class CharacterAttack : MonoBehaviour
 
     public void Bullet()
     {
-        Instantiate(bulletPref, transform.position + move.GetShootingDirection(), Quaternion.identity);
+        Instantiate(HandleChangeGun().ProjectilePrefab, transform.position + move.GetShootingDirection(), Quaternion.identity);
+        HandleChangeGun().Ammo -= 0.5f;
+    }
+
+    void Reload()
+    {
+
     }
 }
