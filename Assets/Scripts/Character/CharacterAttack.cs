@@ -29,6 +29,11 @@ public class CharacterAttack : MonoBehaviour
         HandleChangeGun();
     }
 
+    private void OnDestroy()
+    {
+        weapons.ForEach(weapon => weapon.ResetValues());
+    }
+
     //изменить оружие
     public WeaponScript HandleChangeGun()
     {
@@ -41,6 +46,10 @@ public class CharacterAttack : MonoBehaviour
         {
             gunType = GunType.Knife;
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            gunType= GunType.Crossbow;
+        }
 
         foreach (var weapon in weapons)
         {
@@ -49,7 +58,6 @@ public class CharacterAttack : MonoBehaviour
                 weapon1 = weapon;
             }
         }
-
         return weapon1;
     }
 

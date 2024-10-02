@@ -73,6 +73,20 @@ public class CharacterAnimator : MonoBehaviour
             animator.SetBool("IsAttackMove", true);
         }
 
+        else if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Crossbow && attack.HandleChangeGun().Ammo > 0)
+        {
+            animator.SetFloat("ShootX", move.GetShootingDirection().x);
+            animator.SetFloat("ShootY", move.GetShootingDirection().y);
+            animator.SetBool("IsCrossbowIdle", true);
+        }
+        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Crossbow && attack.HandleChangeGun().Ammo > 0)
+        {
+            animator.SetFloat("ShootX", move.GetShootingDirection().x);
+            animator.SetFloat("ShootY", move.GetShootingDirection().y);
+            animator.SetBool("IsCrossbowMove", true);
+        }
+
+
         else if (Input.GetMouseButtonDown(0) && attack.gunType == GunType.Knife)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
@@ -85,6 +99,8 @@ public class CharacterAnimator : MonoBehaviour
         {
             animator.SetBool("IsAttackMove", false);
             animator.SetBool("IsAttackIdle", false);
+            animator.SetBool("IsCrossbowIdle", false);
+            animator.SetBool("IsCrossbowMove", false);
         }
     }
 }

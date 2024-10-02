@@ -19,6 +19,12 @@ public class UIScript : MonoBehaviour
     [SerializeField] TMP_Text ammoText;
     [SerializeField] TMP_Text moneyText;
 
+    [Header("Gun")]
+    [SerializeField] Image Pistol;
+    [SerializeField] Image CrossBow;
+    [SerializeField] Image Knife;
+
+
     // Start is called before the first frame update
     void Start()
     {
