@@ -47,4 +47,26 @@ public class UIScript : MonoBehaviour
         ammoText.text = characterAttack.HandleChangeGun().Ammo+"/"+ characterAttack.HandleChangeGun().MaxAmmo;
         moneyText.text = stats.Money+"$";
     }
+
+    public void ChangeColor(GunType gunType) 
+    {
+        switch (gunType) 
+        {
+            case GunType.Pistol:
+                Pistol.color = Color.white;
+                Knife.color = Color.black;
+                CrossBow.color = Color.black;
+                break;
+            case GunType.Knife:
+                Knife.color = Color.white;
+                Pistol.color = Color.black;
+                CrossBow.color = Color.black;
+                break;
+            case GunType.Crossbow:
+                CrossBow.color = Color.white;
+                Pistol.color = Color.black;
+                Knife.color = Color.black;
+                break;
+        }
+    }
 }

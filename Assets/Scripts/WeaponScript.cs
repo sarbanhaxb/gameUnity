@@ -47,4 +47,27 @@ public class WeaponScript : ScriptableObject
     {
         SaveInitialValues();
     }
+
+    public void Reload(GunType gunType)
+    {
+        switch (gunType)
+        {
+            case GunType.Pistol:
+                if (MaxAmmo > 0)
+                {
+                    MaxAmmo -= (int)(initialAmmo - Ammo);
+                    Ammo = initialAmmo;
+                }
+                break;
+            case GunType.Crossbow:
+                {
+                    if (MaxAmmo > 0)
+                    {
+                        MaxAmmo -= (int)(initialAmmo - Ammo);
+                        Ammo = initialAmmo;
+                    }
+                    break;
+                }
+        }
+    }
 }

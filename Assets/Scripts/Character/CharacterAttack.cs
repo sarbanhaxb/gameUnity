@@ -9,6 +9,7 @@ public class CharacterAttack : MonoBehaviour
     CharacterMovement move;
     CharacterStats stats;
     WeaponScript Stats;
+    UIScript UI;
     public List<WeaponScript> weapons;
 
 
@@ -21,12 +22,14 @@ public class CharacterAttack : MonoBehaviour
     {
         move = GetComponent<CharacterMovement>();
         stats = GetComponent<CharacterStats>();
+        UI = FindObjectOfType<UIScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleChangeGun();
+        if (Input.GetKeyDown(KeyCode.R)) HandleChangeGun().Reload(gunType);
     }
 
     private void OnDestroy()
@@ -41,15 +44,22 @@ public class CharacterAttack : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             gunType = GunType.Pistol;
+            UI.ChangeColor(gunType);
+
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             gunType = GunType.Knife;
+            UI.ChangeColor(gunType);
+
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            gunType= GunType.Crossbow;
+            gunType = GunType.Crossbow;
+            UI.ChangeColor(gunType);
+
         }
+
 
         foreach (var weapon in weapons)
         {
@@ -85,10 +95,5 @@ public class CharacterAttack : MonoBehaviour
     {
         Instantiate(HandleChangeGun().ProjectilePrefab, transform.position + move.GetShootingDirection(), Quaternion.identity);
         HandleChangeGun().Ammo -= 0.5f;
-    }
-
-    void Reload()
-    {
-
     }
 }

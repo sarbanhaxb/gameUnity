@@ -19,3 +19,5 @@ MonoBehaviour:
   Damage: 0
   AttackSpeed: 0
   ReloadTime: 0
+  GunType: 0
+  ProjectilePrefab: {fileID: 0}
