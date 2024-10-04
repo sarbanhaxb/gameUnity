@@ -60,26 +60,26 @@ public class CharacterAnimator : MonoBehaviour
 
     void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Pistol && attack.HandleChangeGun().Ammo > 0)
+        if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Pistol && attack.HandleChangeGun().Ammo > 0 && !attack.isReloading)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
             animator.SetFloat("ShootY", move.GetShootingDirection().y);
             animator.SetBool("IsAttackIdle", true);
         }
-        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Pistol && attack.HandleChangeGun().Ammo > 0)
+        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Pistol && attack.HandleChangeGun().Ammo > 0 && !attack.isReloading)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
             animator.SetFloat("ShootY", move.GetShootingDirection().y);
             animator.SetBool("IsAttackMove", true);
         }
 
-        else if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Crossbow && attack.HandleChangeGun().Ammo > 0)
+        else if (Input.GetMouseButtonDown(0) && move.moveDirection == Vector2.zero && attack.gunType == GunType.Crossbow && attack.HandleChangeGun().Ammo > 0 && !attack.isReloading)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
             animator.SetFloat("ShootY", move.GetShootingDirection().y);
             animator.SetBool("IsCrossbowIdle", true);
         }
-        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Crossbow && attack.HandleChangeGun().Ammo > 0)
+        else if (Input.GetMouseButtonDown(0) && move.moveDirection != Vector2.zero && attack.gunType == GunType.Crossbow && attack.HandleChangeGun().Ammo > 0 && !attack.isReloading)
         {
             animator.SetFloat("ShootX", move.GetShootingDirection().x);
             animator.SetFloat("ShootY", move.GetShootingDirection().y);

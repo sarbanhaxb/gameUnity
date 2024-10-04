@@ -55,16 +55,16 @@ public class WeaponScript : ScriptableObject
             case GunType.Pistol:
                 if (MaxAmmo > 0)
                 {
-                    MaxAmmo -= (int)(initialAmmo - Ammo);
-                    Ammo = initialAmmo;
+                    MaxAmmo -= (int)(Magazine - Ammo);
+                    Ammo = Magazine;
                 }
                 break;
             case GunType.Crossbow:
                 {
                     if (MaxAmmo > 0)
                     {
-                        MaxAmmo -= (int)(initialAmmo - Ammo);
-                        Ammo = initialAmmo;
+                        MaxAmmo -= (int)(Magazine - Ammo);
+                        Ammo = Magazine;
                     }
                     break;
                 }

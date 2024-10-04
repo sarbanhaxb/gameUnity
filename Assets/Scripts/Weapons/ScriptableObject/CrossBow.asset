@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd53dce16120d3b4c8537278f5cf22f2, type: 3}
-  m_Name: Pistol
+  m_Name: CrossBow
   m_EditorClassIdentifier: 
-  Ammo: 8
-  MaxAmmo: 24
-  LimitAmmo: 48
-  Magazine: 8
-  Damage: 5
-  AttackSpeed: 5
+  Ammo: 1
+  MaxAmmo: 14
+  LimitAmmo: 28
+  Magazine: 1
+  Damage: 3
+  AttackSpeed: 3
   ReloadTime: 2
-  GunType: 1
-  ProjectilePrefab: {fileID: 3254288844493868034, guid: aaa027c39ce848645bd04c1df9e68601, type: 3}
+  GunType: 2
+  ProjectilePrefab: {fileID: 8275301856022221299, guid: b63dc9c1817858c44b92a379130e92a4, type: 3}
