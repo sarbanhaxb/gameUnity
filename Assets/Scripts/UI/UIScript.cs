@@ -33,12 +33,18 @@ public class UIScript : MonoBehaviour
     {
         stats = GameObject.FindAnyObjectByType<CharacterStats>();
         characterAttack = FindObjectOfType<CharacterAttack>();
+        hpBar.maxValue = stats.MaxHP;
+        hpBar.value = 15;
+        armorBar.maxValue = stats.MaxArmor;
+        expBar.value = 0;
+        expBar.maxValue = stats.MaxExperience;
     }
 
     // Update is called once per frame
     void Update()
     {
         InitializeStats();
+        Reloader.gameObject.SetActive(characterAttack.isReloading);
     }
 
     void InitializeStats()

@@ -8,7 +8,7 @@ public class ItemControlScript : MonoBehaviour
     CharacterStats playerStats;
     void Start()
     {
-        playerStats = GetComponent<CharacterStats>();
+        playerStats = FindObjectOfType<CharacterStats>();
     }
 
     void Update()
@@ -23,20 +23,33 @@ public class ItemControlScript : MonoBehaviour
             switch (item.itemType)
             {
                 case ItemType.ARMOR:
-                    playerStats.Armor += item.value;
+                    playerStats.Armor = CheckMaxStat(playerStats.Armor, playerStats.MaxArmor, item.value);
                     break;
                 case ItemType.MEDICINE:
-                    playerStats.HP += item.value;
+                    playerStats.HP = CheckMaxStat(playerStats.HP, playerStats.MaxHP, item.value);
                     break;
                 case ItemType.MONEY:
+                    playerStats.Money += item.value;
+                    break;
+                case ItemType.EXPITEM:
+                    playerStats.Experience += item.value;
+                    break;
+                case ItemType.BULLETS:
+                    playerStats.Armor += item.value;
                     break;
             }
         }
     }
 
-    //WeaponScript FindGun(List<WeaponScript> weapons)
-    //{
-
-         
-    //}
+    private int CheckMaxStat(int currentStat, int maxStat, int itemValue)
+    {
+        if (currentStat <= maxStat && currentStat + itemValue >= maxStat)
+        {
+            return maxStat;
+        }
+        else
+        {
+            return currentStat + itemValue;
+        }
+    }
 }
