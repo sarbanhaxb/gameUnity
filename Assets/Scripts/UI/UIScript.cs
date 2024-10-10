@@ -96,4 +96,7 @@ public class UIScript : MonoBehaviour
         Reloader.minValue = 0;
         Reloader.value = current;
     }
+
+    public void ChangeMaxExp(int MaxExp) => expBar.maxValue = MaxExp;
+
 }

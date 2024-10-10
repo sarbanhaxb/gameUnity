@@ -6,9 +6,13 @@ public class ItemControlScript : MonoBehaviour
 {
     public ItemScript item;
     CharacterStats playerStats;
+    CharacterAttack character;
+    UIScript UI;
     void Start()
     {
         playerStats = FindObjectOfType<CharacterStats>();
+        character = FindObjectOfType<CharacterAttack>();
+        UI = FindObjectOfType<UIScript>();
     }
 
     void Update()
@@ -32,12 +36,19 @@ public class ItemControlScript : MonoBehaviour
                     playerStats.Money += item.value;
                     break;
                 case ItemType.EXPITEM:
-                    playerStats.Experience += item.value;
+                    LevelUp(item.value);
                     break;
                 case ItemType.BULLETS:
-                    playerStats.Armor += item.value;
+                    Debug.Log("TUTACHKI");
+                    var weapon = FindGun(character.weapons, ItemType.BULLETS);
+                    weapon.MaxAmmo = CheckMaxStat(weapon.MaxAmmo, weapon.LimitAmmo, item.value);
+                    break;
+                case ItemType.ARROWS:
+                    weapon = FindGun(character.weapons, ItemType.ARROWS);
+                    weapon.MaxAmmo = CheckMaxStat(weapon.MaxAmmo, weapon.LimitAmmo, item.value);
                     break;
             }
+            Destroy(gameObject);
         }
     }
 
@@ -51,5 +62,31 @@ public class ItemControlScript : MonoBehaviour
         {
             return currentStat + itemValue;
         }
+    }
+
+    private WeaponScript FindGun(List<WeaponScript> weapons, ItemType itemType)
+    {
+        foreach (var weapon in weapons)
+        {
+            if (weapon.bulletType == itemType)
+            {
+                return weapon;
+            }
+        }
+        return weapons[0];
+    }
+    
+    public void LevelUp(int value)
+    {
+        if (playerStats.Experience >= playerStats.MaxExperience || playerStats.Experience + value >= playerStats.MaxExperience)
+        {
+            playerStats.Experience += value;
+            playerStats.Level++;
+            playerStats.Experience -= playerStats.MaxExperience;
+            playerStats.MaxExperience = (int)(playerStats.Level * 0.5f * (playerStats.MaxExperience + (playerStats.MaxExperience * 0.1f)));
+            UI.ChangeMaxExp(playerStats.MaxExperience);
+        }
+        else
+            playerStats.Experience += value;
     }
 }

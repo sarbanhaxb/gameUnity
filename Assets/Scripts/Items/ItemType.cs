@@ -9,5 +9,6 @@ public enum ItemType
     MONEY,
     BULLETS,
     ARROWS,
-    EXPITEM
+    EXPITEM,
+    NONE
 }

@@ -21,3 +21,4 @@ MonoBehaviour:
   ReloadTime: 2
   GunType: 2
   ProjectilePrefab: {fileID: 8275301856022221299, guid: b63dc9c1817858c44b92a379130e92a4, type: 3}
+  bulletType: 4

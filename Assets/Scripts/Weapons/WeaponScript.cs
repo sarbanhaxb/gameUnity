@@ -14,6 +14,7 @@ public class WeaponScript : ScriptableObject
     public float ReloadTime;
     public GunType GunType;
     public GameObject ProjectilePrefab;
+    public ItemType bulletType;
 
     private float initialAmmo;
     private int initialMaxAmmo;
