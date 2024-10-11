@@ -38,6 +38,10 @@ public class UIScript : MonoBehaviour
         armorBar.maxValue = stats.MaxArmor;
         expBar.value = 0;
         expBar.maxValue = stats.MaxExperience;
+        Pistol.color = Color.white;
+        Knife.color = Color.black;
+        CrossBow.color = Color.black;
+
     }
 
     // Update is called once per frame
@@ -97,6 +101,10 @@ public class UIScript : MonoBehaviour
         Reloader.value = current;
     }
 
-    public void ChangeMaxExp(int MaxExp) => expBar.maxValue = MaxExp;
-
+    public void ChangeMaxExp(int MaxExp) 
+    {
+        expBar.maxValue = MaxExp;
+        hpBar.maxValue = stats.MaxHP;
+        armorBar.maxValue = stats.MaxArmor;
+    }
 }
