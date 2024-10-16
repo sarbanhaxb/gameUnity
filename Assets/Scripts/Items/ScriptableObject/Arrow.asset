@@ -15,6 +15,6 @@ MonoBehaviour:
   itemType: 4
   name: 
   value: 4
-  cost: 0
-  sprite: {fileID: 0}
+  cost: 150
+  sprite: {fileID: 1482146410, guid: a02fde3656adee24d9a4ab4fecd97094, type: 3}
   itemPrefab: {fileID: 0}
