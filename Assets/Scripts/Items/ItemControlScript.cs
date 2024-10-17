@@ -68,7 +68,7 @@ public class ItemControlScript : MonoBehaviour
         }
     }
 
-    private int CheckMaxStat(int currentStat, int maxStat, int itemValue)
+    public int CheckMaxStat(int currentStat, int maxStat, int itemValue)
     {
         if (currentStat <= maxStat && currentStat + itemValue >= maxStat)
         {
