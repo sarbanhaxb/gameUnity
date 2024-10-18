@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class ShopScript : MonoBehaviour
 {
     public GameObject shopObj;
+    public GameObject pleasePress;
     bool inShop = false;
     public List<ItemScript> items;
     public GameObject button;
@@ -36,6 +37,7 @@ public class ShopScript : MonoBehaviour
         if (collision.tag == "Player")
         {
             inShop = true;
+            pleasePress.SetActive(true);
         }
     }
 
@@ -46,6 +48,7 @@ public class ShopScript : MonoBehaviour
             inShop = false;
             shopObj.SetActive(false);
             Clearitems();
+            pleasePress.SetActive(false);
         }
     }
 
