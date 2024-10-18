@@ -17,6 +17,8 @@ public class EnemyScript : MonoBehaviour
     float distanceToPlayer;
     GameObject player;
 
+    bool attacking;
+
     float chaseDistance = 5f;
     float attackDistance = 0.7f;
     float roamingDistance = 10f;
@@ -92,12 +94,13 @@ public class EnemyScript : MonoBehaviour
 
     private void ZombieChasing()
     {
+        animator.SetBool("IsAttack", false);
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, EnemySpeed * Time.deltaTime);
     }
 
     private void ZombieAttacking()
     {
-        Debug.Log("ATTACK!!1");
+        animator.SetBool("IsAttack", true);
     }
 
     void AnimatorSetData()
