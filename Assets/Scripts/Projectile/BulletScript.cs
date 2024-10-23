@@ -19,4 +19,22 @@ public class BulletScript : MonoBehaviour
 
         Destroy(gameObject, 4f);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var eminem = collision.gameObject.GetComponent<EnemyScript>();
+        if (collision.tag == "Enemy" && eminem.EnemyHP > 0)
+        {
+            eminem.EnemyHP -= 10;
+            if (eminem.EnemyHP <= 0)
+            {
+                var anim = collision.gameObject.GetComponent<Animator>();
+                anim.SetTrigger("DeathTrigger");
+                eminem.EnemySpeed = 0;
+                Destroy(collision.gameObject, 2);
+            }
+            Destroy(gameObject);
+        }
+       
+    }
 }

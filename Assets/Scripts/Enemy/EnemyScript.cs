@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 
 public class EnemyScript : MonoBehaviour
 {
 
-    public int EnemyMaxHP { get; set; }
+    public int EnemyMaxHP { get; set; } = 100;
     public int EnemyHP { get; set; }
     public int EnemyDamage { get; set; }
     public int EnemySpeed { get; set; }
+
     float roamRadius = 10f;
 
     float distanceToPlayer;
@@ -20,13 +22,16 @@ public class EnemyScript : MonoBehaviour
     bool attacking;
 
     float chaseDistance = 5f;
-    float attackDistance = 0.7f;
+    float attackDistance = 0.6f;
     float roamingDistance = 10f;
     ZombieState currentState = ZombieState.Roaming;
+    CharacterStats characterStats;
 
 
     float oldX;
     float oldY;
+    float DifX = 0;
+    float DifY = 0;
 
 
     Vector2 roamPoint;
@@ -45,11 +50,13 @@ public class EnemyScript : MonoBehaviour
     void Start()
     {
         EnemyHP = EnemyMaxHP;
-        EnemyDamage = 25;
+        EnemyDamage = 1;
         EnemySpeed = 1;
         player = GameObject.FindGameObjectWithTag("Player");
         roamPoint = transform.position;
         animator = GetComponent<Animator>();
+
+        characterStats = player.GetComponent<CharacterStats>();
     }
 
     // Update is called once per frame
@@ -105,12 +112,43 @@ public class EnemyScript : MonoBehaviour
 
     void AnimatorSetData()
     {
+        if (currentState == ZombieState.Attacking)
+        {
 
-        animator.SetFloat("eX", transform.position.x - oldX);
-        animator.SetFloat("eY", transform.position.y - oldY);
+            animator.SetFloat("eX", getN(DifX));
+            animator.SetFloat("eY", getN(DifY));
+        }
+        else
+        {
+            DifX = transform.position.x - oldX;
+            DifY = transform.position.y - oldY;
 
-        oldX = transform.position.x;
-        oldY = transform.position.y;
+            animator.SetFloat("eX", DifX);
+            animator.SetFloat("eY", DifY);
+
+            oldX = transform.position.x;
+            oldY = transform.position.y;
+        }
+    }
+
+    int getN(double n)
+    {
+        if (n > 0) return 1;
+        else if (n < 0) return -1;
+        else return 0;
+    }
+
+
+    public void Attack()
+    {
+        if (distanceToPlayer < attackDistance)
+            characterStats.HP -= EnemyDamage;
+        Debug.Log(characterStats.HP);
+
+        if (characterStats.HP <= 0)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     Vector2 GetRandomPoint() => (Vector2)transform.position + Random.insideUnitCircle * roamRadius;
