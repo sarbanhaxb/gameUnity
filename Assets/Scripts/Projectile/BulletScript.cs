@@ -30,11 +30,14 @@ public class BulletScript : MonoBehaviour
             {
                 var anim = collision.gameObject.GetComponent<Animator>();
                 anim.SetTrigger("DeathTrigger");
+
                 eminem.EnemySpeed = 0;
-                Destroy(collision.gameObject, 2);
+                Destroy(collision.gameObject, 20);
+                eminem.DropGoods();
+                eminem.currentState = EnemyScript.ZombieState.Death;
+                eminem.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             }
             Destroy(gameObject);
         }
-       
     }
 }

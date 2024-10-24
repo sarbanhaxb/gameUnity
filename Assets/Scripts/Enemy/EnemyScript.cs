@@ -24,7 +24,7 @@ public class EnemyScript : MonoBehaviour
     float chaseDistance = 5f;
     float attackDistance = 0.6f;
     float roamingDistance = 10f;
-    ZombieState currentState = ZombieState.Roaming;
+    public ZombieState currentState = ZombieState.Roaming;
     CharacterStats characterStats;
 
 
@@ -33,6 +33,7 @@ public class EnemyScript : MonoBehaviour
     float DifX = 0;
     float DifY = 0;
 
+    public List<GameObject> items;
 
     Vector2 roamPoint;
 
@@ -44,7 +45,8 @@ public class EnemyScript : MonoBehaviour
     {
         Roaming,
         Chasing,
-        Attacking
+        Attacking,
+        Death
     }
 
     void Start()
@@ -114,9 +116,55 @@ public class EnemyScript : MonoBehaviour
     {
         if (currentState == ZombieState.Attacking)
         {
+            float oX = DifX;
+            float oY = DifY;
 
-            animator.SetFloat("eX", getN(DifX));
-            animator.SetFloat("eY", getN(DifY));
+            if (oX < 0 && oY < 0)
+            {
+                if (Math.Abs(oX) > Mathf.Abs(oY))
+                {
+                    oX = -1; oY = 0;
+                }
+                else
+                {
+                    oX = 0; oY = -1;
+                }
+            }
+            else if (oX > 0 && oY < 0)
+            {
+                if (Math.Abs(oX) < Mathf.Abs(oY))
+                {
+                    oX = 0; oY = -1;
+                }
+                else
+                {
+                    oX = 1; oY = 0;
+                }
+            }
+            else if (oX > 0 && oY > 0)
+            {
+                if (Math.Abs(oX) > Math.Abs(oY))
+                {
+                    oX = 1; oY = 0;
+                }
+                else
+                {
+                    oX = 0; oY = 1;
+                }
+            }
+            else if (oX < 0 && oY > 0)
+            {
+                if (Math.Abs(oX) > Math.Abs(oY))
+                {
+                    oX = -1; oY = 0;
+                }
+                else
+                {
+                    oX = 0; oY = 1;
+                }
+            }
+            animator.SetFloat("eX", oX);
+            animator.SetFloat("eY", oY);
         }
         else
         {
@@ -131,26 +179,32 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    int getN(double n)
-    {
-        if (n > 0) return 1;
-        else if (n < 0) return -1;
-        else return 0;
-    }
-
-
     public void Attack()
     {
         if (distanceToPlayer < attackDistance)
-            characterStats.HP -= EnemyDamage;
+            if (characterStats.Armor >= EnemyDamage)
+                characterStats.Armor -= EnemyDamage;
+            else
+            {
+                characterStats.HP -= Math.Abs(characterStats.Armor - EnemyDamage);
+                characterStats.Armor = 0;
+            }
         Debug.Log(characterStats.HP);
 
         if (characterStats.HP <= 0)
-        {
             SceneManager.LoadScene(0);
-        }
     }
 
-    Vector2 GetRandomPoint() => (Vector2)transform.position + Random.insideUnitCircle * roamRadius;
+    public void DropGoods()
+    {
+        var randomCount = Random.Range(1, 4);
 
+        for (int i = 0; i < randomCount; i++)
+        {
+            var randomItem = Random.Range(1, items.Count);
+            Instantiate(items[randomItem], GetRandomPosInRadius(transform.position, 1), Quaternion.identity);
+        }
+    }
+    Vector2 GetRandomPoint() => (Vector2)transform.position + Random.insideUnitCircle * roamRadius;
+    Vector3 GetRandomPosInRadius(Vector3 centerPoint, float radius) => centerPoint + (Random.insideUnitSphere * radius);
 }
