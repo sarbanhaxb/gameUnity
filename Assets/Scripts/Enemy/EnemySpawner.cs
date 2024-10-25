@@ -5,9 +5,9 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemy;
-    int count = 5;
-    int minCount = 1;
-    int maxCount = 5;
+    int count = 1;
+    int minCount = 30;
+    int maxCount = 50;
     public List<Transform> spawnPoints;
     void Start()
     {

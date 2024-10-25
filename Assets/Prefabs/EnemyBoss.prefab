@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6430976614847779278}
   - component: {fileID: 1088527728997344072}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: EnemyBoss
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,9 +162,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b45de3d72caaf3044a24dc5df7af431a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMaxHP: 100
-  EnemyHP: 100
-  EnemyDamage: 5
+  EnemyMaxHP: 1500
+  EnemyHP: 1000
+  EnemyDamage: 50
   EnemySpeed: 1
   attackDistance: 0.7
   currentState: 0

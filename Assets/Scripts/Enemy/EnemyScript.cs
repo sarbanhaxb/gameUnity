@@ -9,10 +9,10 @@ using Random = UnityEngine.Random;
 public class EnemyScript : MonoBehaviour
 {
 
-    public int EnemyMaxHP { get; set; } = 100;
-    public int EnemyHP { get; set; }
-    public int EnemyDamage { get; set; }
-    public int EnemySpeed { get; set; }
+    public int EnemyMaxHP;
+    public int EnemyHP;
+    public int EnemyDamage;
+    public float EnemySpeed;
 
     float roamRadius = 10f;
 
@@ -22,7 +22,7 @@ public class EnemyScript : MonoBehaviour
     bool attacking;
 
     float chaseDistance = 5f;
-    float attackDistance = 0.6f;
+    public float attackDistance = 0.7f;
     float roamingDistance = 10f;
     public ZombieState currentState = ZombieState.Roaming;
     CharacterStats characterStats;
@@ -52,8 +52,6 @@ public class EnemyScript : MonoBehaviour
     void Start()
     {
         EnemyHP = EnemyMaxHP;
-        EnemyDamage = 1;
-        EnemySpeed = 1;
         player = GameObject.FindGameObjectWithTag("Player");
         roamPoint = transform.position;
         animator = GetComponent<Animator>();
@@ -96,7 +94,7 @@ public class EnemyScript : MonoBehaviour
 
     private void ZombieRoaming()
     {
-        transform.position = Vector3.MoveTowards(transform.position, roamPoint, EnemySpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, roamPoint, EnemySpeed * Time.deltaTime);
         if (Vector2.Distance(transform.position, roamPoint) < 0.1f)
             roamPoint = GetRandomPoint();
     }
@@ -104,13 +102,10 @@ public class EnemyScript : MonoBehaviour
     private void ZombieChasing()
     {
         animator.SetBool("IsAttack", false);
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, EnemySpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, EnemySpeed * Time.deltaTime);
     }
 
-    private void ZombieAttacking()
-    {
-        animator.SetBool("IsAttack", true);
-    }
+    private void ZombieAttacking() => animator.SetBool("IsAttack", true);
 
     void AnimatorSetData()
     {
@@ -121,7 +116,7 @@ public class EnemyScript : MonoBehaviour
 
             if (oX < 0 && oY < 0)
             {
-                if (Math.Abs(oX) > Mathf.Abs(oY))
+                if (Math.Abs(oX) >= Mathf.Abs(oY))
                 {
                     oX = -1; oY = 0;
                 }
@@ -132,7 +127,7 @@ public class EnemyScript : MonoBehaviour
             }
             else if (oX > 0 && oY < 0)
             {
-                if (Math.Abs(oX) < Mathf.Abs(oY))
+                if (Math.Abs(oX) <= Mathf.Abs(oY))
                 {
                     oX = 0; oY = -1;
                 }
@@ -143,7 +138,7 @@ public class EnemyScript : MonoBehaviour
             }
             else if (oX > 0 && oY > 0)
             {
-                if (Math.Abs(oX) > Math.Abs(oY))
+                if (Math.Abs(oX) >= Math.Abs(oY))
                 {
                     oX = 1; oY = 0;
                 }
@@ -154,7 +149,7 @@ public class EnemyScript : MonoBehaviour
             }
             else if (oX < 0 && oY > 0)
             {
-                if (Math.Abs(oX) > Math.Abs(oY))
+                if (Math.Abs(oX) >= Math.Abs(oY))
                 {
                     oX = -1; oY = 0;
                 }

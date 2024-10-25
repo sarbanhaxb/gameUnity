@@ -84,13 +84,22 @@ public class CharacterAttack : MonoBehaviour
     public void MeleeAttack()
     {
         Collider2D enemy = Physics2D.OverlapCircle(meleeAttackPoint.position, meleeAttackRange);
-        if (enemy != null)
+        var eminem = enemy.GetComponent<EnemyScript>();
+        Debug.Log(eminem.name);
+        if (enemy != null && enemy.tag == "Enemy")
         {
-            Debug.Log(enemy.name);
-        }
-        else
-        {
-            Debug.Log("BOBR KURVA");
+            eminem.EnemyHP -= 10;
+            if (eminem.EnemyHP <= 0)
+            {
+                var anim = eminem.gameObject.GetComponent<Animator>();
+                anim.SetTrigger("DeathTrigger");
+
+                eminem.EnemySpeed = 0;
+                Destroy(eminem.gameObject, 20);
+                eminem.DropGoods();
+                eminem.currentState = EnemyScript.ZombieState.Death;
+                eminem.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+            }
         }
     }
 
@@ -109,7 +118,6 @@ public class CharacterAttack : MonoBehaviour
 
     void Reloading()
     {
-
         if (currentReloadingTime < HandleChangeGun().ReloadTime)
         {
             currentReloadingTime += Time.deltaTime;
